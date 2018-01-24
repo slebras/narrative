@@ -134,8 +134,10 @@ define([
         var x = d.log2fc_f
         var y = d.p_value_f
 
-        if ( Math.abs(x) > fc && Math.abs(y) > pv ) {
-          if (d.significant  === 'yes'){
+        if (   (!this.data('upperbounds') && Math.abs(x) > fc && Math.abs(y) > pv)
+             ||( this.data('upperbounds') && Math.abs(x) < fc && Math.abs(y) < pv)
+           ) {
+          if (d.significant  !== 'no'){
            return "red";
           }
         }
@@ -213,6 +215,39 @@ define([
                           .attr('id', 'fc2')
                           .append('1.0')
                       )
+                  )
+                  .append(
+                    $.jqElem('td')
+                      .append(
+                        $.jqElem('input')
+                          .attr('type', 'checkbox')
+                          .on('click', function(e) {
+                            console.log($(e.target).prop('checked'));
+                            self.data('upperbounds', $(e.target).prop('checked'));
+
+                            fc = self.data( "fc").val();
+                            pv = self.data( "pvalue").val();
+
+                            var numCircles = svg.selectAll("circle").size();
+                            var seenCircles = 0;
+                            svg.selectAll("circle")
+                              .transition()
+                              .attr("fill", function(d) {
+                                var cc = self.colorx(d, pv, fc);
+                                if ( cc  ===  "red" ) {
+                                  cnt = cnt + 1;
+                                }
+                                return cc;
+                              }).each('end', function() {
+                                seenCircles++;
+                                if (numCircles  ===  seenCircles) {
+                                  updateCnt()
+                                }
+                              });
+
+                          })
+                      )
+                      .append(' sliders are upper bounds')
                   )
                   .append(
                     $.jqElem('td')
@@ -384,7 +419,11 @@ define([
         };
 
 
-        var data = text.condition_pairs[counter].voldata;
+        var data = text.condition_pairs[counter].voldata.filter( function(d) {
+          return    ! Number.isNaN(parseFloat(d.log2fc_f))
+                 && ! Number.isNaN(parseFloat(d.p_value_f))
+                 //&& ! Number.isNaN(parseFloat(d.q_value))
+        });
         self.data( "cond1").text(text.condition_pairs[counter].condition_1);
         self.data( "cond2").text(text.condition_pairs[counter].condition_2);
 
@@ -430,6 +469,7 @@ define([
 
         var sliderUpdate = _.debounce(function() {
           fc = self.data( "fc").val();
+          pv = self.data( "pvalue").val();
 
           self.data('selfc').text(parseFloat(fc).toFixed(2));
           var numCircles = svg.selectAll("circle").size();
@@ -460,6 +500,7 @@ define([
         }
 
         var slider2Update = _.debounce(function(){
+          fc = self.data( "fc").val();
           pv = self.data( "pvalue").val();
           self.data('selpval').text(parseFloat(pv).toFixed(2));
           var numCircles = svg.selectAll("circle").size();
