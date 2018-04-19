@@ -39,6 +39,8 @@ define (
         init: function(options) {
             this._super(options);
 
+            this.upa = this.options.upas.ws_id;
+
             this.ws_name = options.ws_name;
             this.ws_id = options.ws_id;
             if (options.ws && options.id) {
@@ -65,7 +67,7 @@ define (
             	container.empty();
             	container.append("<div><img src=\""+self.loadingImage+"\">&nbsp;&nbsp;loading genome data...</div>");
 
-            	kbws.get_object_subset([{ref: self.ws_name +"/"+ self.ws_id, included: ['contigs/[*]/id', 'contigs/[*]/length', 'id', 'name', 'source', 'source_id', 'type']}], function(data) {
+            	kbws.get_object_subset([{ref: self.upa, included: ['contigs/[*]/id', 'contigs/[*]/length', 'id', 'name', 'source', 'source_id', 'type']}], function(data) {
             		container.empty();
             		var cs = data[0].data;
             		console.log(cs);

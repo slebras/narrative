@@ -32,7 +32,7 @@ define ([
         init: function (options) {
             var $self = this;
             $self._super(options);
-console.log("CALLS RSV : ", options);
+
             /* Setup default data for the overview tab */
             $self.set_overview = {
                 'link_ref': '',
@@ -43,6 +43,8 @@ console.log("CALLS RSV : ", options);
                 'avg_reads_per_library':''
             };
             $self.set_items = [];
+
+            this.upa = this.options.upas.obj_ref;
 
             if (options._obj_info) {
                 $self.obj_info = options._obj_info;
@@ -67,7 +69,7 @@ console.log("CALLS RSV : ", options);
                 {'token': this.authToken()});
 
             return Promise.resolve($self.setAPI.get_reads_set_v1({
-                'ref': $self.obj_ref,
+                'ref': $self.upa,
                 'include_item_info': 1
             }))
                 .then(function (results) {

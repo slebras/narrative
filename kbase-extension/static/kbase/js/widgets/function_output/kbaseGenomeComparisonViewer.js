@@ -38,6 +38,7 @@ define (
             this.pref = StringUtil.uuid();
             this.ws = options.ws;
             this.id = options.id;
+            this.upa = this.options.upas.id;
             return this;
         },
 
@@ -55,7 +56,7 @@ define (
             var kbws = new Workspace(self.wsUrl, {'token': self.authToken()});
 
             //var request = {auth: self.authToken(), workspace: self.ws_name, id: self.simulation_id, type: 'KBasePhenotypes.PhenotypeSimulationSet'};
-            kbws.get_objects([{ref: self.ws +"/"+ self.id}], function(data) {
+            kbws.get_objects([{ref: self.upa}], function(data) {
             	///////////////////////////////////// Data Preparation ////////////////////////////////////////////
             	var object = data[0].data;
             	var info = data[0].info;

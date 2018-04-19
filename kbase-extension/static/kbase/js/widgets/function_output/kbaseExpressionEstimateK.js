@@ -38,6 +38,8 @@ define (
             this.$messagePane = $("<div/>").addClass("kbwidget-message-pane kbwidget-hide-message");
             this.$elem.append(this.$messagePane);
 
+      this.upa = this.options.upas.estimateKResultID;
+
 			return this;
 		},
 
@@ -64,7 +66,7 @@ define (
         loadAndRender: function(){
             var self = this;
             self.loading(true);
-            var ref = self.buildObjectIdentity(this.options.workspaceID, this.options.estimateKResultID);
+            var ref = self.upa;
 
             self.ws.get_objects(
                 [ref],
@@ -238,28 +240,6 @@ define (
 					var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
 					return v.toString(16);
 				});
-		},
-
-		buildObjectIdentity: function(workspaceID, objectID, objectVer, wsRef) {
-			var obj = {};
-			if (wsRef) {
-				obj['ref'] = wsRef;
-			} else {
-				if (/^\d+$/.exec(workspaceID))
-					obj['wsid'] = workspaceID;
-				else
-					obj['workspace'] = workspaceID;
-
-				// same for the id
-				if (/^\d+$/.exec(objectID))
-					obj['objid'] = objectID;
-				else
-					obj['name'] = objectID;
-
-				if (objectVer)
-					obj['ver'] = objectVer;
-			}
-			return obj;
 		},
 
 		clientError: function(error){

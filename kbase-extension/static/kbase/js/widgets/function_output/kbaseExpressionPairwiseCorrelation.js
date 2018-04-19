@@ -19,7 +19,7 @@ define ([
     kbaseHeatmap
 ) {
     'use strict';
-    
+
     return KBWidget({
         name: 'kbaseExpressionPairwiseCorrelation',
         parent : kbaseExpressionGenesetBaseWidget,
@@ -27,6 +27,12 @@ define ([
 
         maxRange: null,
         minRange: null,
+
+        init: function(options) {
+            this._super(options);
+            this.upa = this.options.upas.expressionMatrixID;
+            return this;
+        },
 
         // To be overriden to specify additional parameters
         getSubmtrixParams: function(){
@@ -47,7 +53,7 @@ define ([
             }
 
             return{
-                input_data: self.options.workspaceID + '/' + self.options.expressionMatrixID,
+                input_data: self.upa,
                 row_ids: features,
                 fl_row_pairwise_correlation: 1,
                 fl_row_set_stats: 1
@@ -73,9 +79,9 @@ define ([
                 var row = [];
                 for(var j = 0 ; j < rowDescriptors.length; j++){
                     row.push(values[i][j].toFixed(3));
-                }                
+                }
                 data.push(row);
-            }            
+            }
             var heatmap =
                 {
                     row_ids : rowIds,
@@ -109,7 +115,7 @@ define ([
                 minValue : self.minRange,
                 maxValue : self.maxRange
             });
-            
+
         }
     });
 });

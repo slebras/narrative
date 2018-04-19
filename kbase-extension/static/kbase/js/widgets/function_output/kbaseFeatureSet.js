@@ -38,7 +38,7 @@ define (
 
         init: function(options) {
             this._super(options);
-console.log("INIT VIEW FEATURE SET : ", options);
+
             this.upa = this.options.upas.featureset_name;
             this.$messagePane = $("<div/>").addClass("kbwidget-message-pane kbwidget-hide-message");
             this.$elem.append(this.$messagePane);
@@ -66,10 +66,9 @@ console.log("INIT VIEW FEATURE SET : ", options);
         loadFeatureSet: function() {
             var self = this;
             self.features = {};
-            console.log("LOADING UPA : ", self.upa);
+
             self.ws.get_objects([ { ref: self.upa } ],
                 function(data) {
-                console.log("LAODED DATA : ", data);
                     var fs = data[0].data;
                     if(fs.description) {
                         self.$mainPanel.append($('<div>')
@@ -90,12 +89,10 @@ console.log("INIT VIEW FEATURE SET : ", options);
                             }
                         }
                     }
-                    console.log("I AM : ", self);
                     self.getGenomeData();
                     self.$mainPanel.show();
                 },
                 function(error) {
-                console.log("F1");
                     self.loading(true);
                     self.renderError(error);
 

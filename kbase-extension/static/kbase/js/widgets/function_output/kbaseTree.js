@@ -49,6 +49,8 @@ define (
             this.$messagePane = $("<div/>").addClass("kbwidget-message-pane kbwidget-hide-message");
             this.$elem.append(this.$messagePane);
 
+            this.upa = this.options.upas.workspaceids;
+
             if (options.workspaceids && options.workspaceids.length > 0) {
                 id = options.workspaceids[0].split('/');
                 this.options.treeID = id[1];
@@ -78,7 +80,7 @@ define (
 
         loadTree: function() {
             var prom;
-            var objId = this.buildObjectIdentity(this.options.workspaceID, this.options.treeID, this.options.treeObjVer, null);
+            var objId = this.upa;
             if (this.options.kbCache)
                 prom = this.options.kbCache.req('ws', 'get_objects', [objId]);
             else
@@ -122,11 +124,11 @@ define (
                 		console.log(err);
                 	});
                 }
-                
+
                 function EasyTreeForNarrative(canvasId, treeString, nodeIdToNameMap, leafClickListener, nodeColorFunc) {
-                    
+
                     var kn_g_tree = kn_parse(treeString);
-                    
+
                     if (nodeIdToNameMap) {
                         for (var nodePos in kn_g_tree.node) {
                             var nodeId = kn_g_tree.node[nodePos].name;
@@ -137,7 +139,7 @@ define (
                             }
                         }
                     }
-                    
+
                     if (nodeColorFunc) {
                         for (var nodePos in kn_g_tree.node) {
                             var node = kn_g_tree.node[nodePos];
@@ -147,10 +149,10 @@ define (
                             }
                         }
                     }
-                    
+
                     var kn_g_conf = new Object();
                     var canvas = document.getElementById(canvasId);
-                    
+
                     var conf = kn_g_conf;
                     conf.c_box = new Array();
                     conf.width = 1000; conf.height = 600;
@@ -179,7 +181,7 @@ define (
                     var changeLayoutY = 0;
                     var changeLayoutW = 0;
                     var changeLayoutH = 0;
-                    
+
                     function plot(canvas, kn_g_tree, kn_g_conf) {
                         kn_plot_core(canvas, kn_g_tree, kn_g_conf);
                         var text = "Change layout";
@@ -198,7 +200,7 @@ define (
                         changeLayoutW = w;
                         changeLayoutH = h;
                     }
-                    
+
                     function changeLayout(isCircular) {
                         kn_g_conf.is_circular = isCircular;
                         kn_g_conf.height = kn_g_conf.is_circular? kn_g_conf.width : kn_g_conf.ymargin * 2 + kn_g_tree.n_tips * kn_g_conf.yskip;
@@ -285,12 +287,12 @@ define (
                         canvas_parent.removeChild(canvas);
                         canvas_parent.appendChild(o);
                         o.appendChild(canvas);
-                        
+
                         if (canvas.addEventListener) canvas.addEventListener('click', ev_canvas, false);
                         else canvas.attachEvent('onclick', ev_canvas);
                     }
                 };
-                
+
                 new EasyTreeForNarrative(self.canvasId, tree.tree, tree.default_node_labels, function(node) {
                 	if ((!tree.ws_refs) || (!tree.ws_refs[node.id])) {
                 		var node_name = tree.default_node_labels[node.id];
@@ -339,28 +341,6 @@ define (
                 workspace: this.options.workspaceID,
                 title: 'Tree'
             };
-        },
-
-        buildObjectIdentity: function(workspaceID, objectID, objectVer, wsRef) {
-            var obj = {};
-            if (wsRef) {
-            	obj['ref'] = wsRef;
-            } else {
-            	if (/^\d+$/.exec(workspaceID))
-            		obj['wsid'] = workspaceID;
-            	else
-            		obj['workspace'] = workspaceID;
-
-            	// same for the id
-            	if (/^\d+$/.exec(objectID))
-            		obj['objid'] = objectID;
-            	else
-            		obj['name'] = objectID;
-
-            	if (objectVer)
-            		obj['ver'] = objectVer;
-            }
-            return obj;
         },
 
         loading: function(doneLoading) {

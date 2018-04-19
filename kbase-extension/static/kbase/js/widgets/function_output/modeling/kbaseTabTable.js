@@ -12,6 +12,7 @@ return KBWidget({
     init: function(input) {
 
         this._super(input);
+        this.upa = input.upas.obj;
         var self = this;
         var $tableContainer = $('<div>');
         this.$elem.append($tableContainer);
@@ -58,10 +59,8 @@ return KBWidget({
         //
         // 3) get meta data, add any metadata tables
         //
-        if (isNaN(input.ws) && isNaN(input.obj) )
-            var param = {workspace: input.ws, name: input.obj};
-        else if (!isNaN(input.ws) && !isNaN(input.obj) )
-            var param = {ref: input.ws+'/'+input.obj};
+
+        var param = { ref : this.upa };
 
         self.kbapi('ws', 'get_object_info_new', {objects: [param], includeMetadata: 1})
           .done(function(res) {
@@ -85,10 +84,6 @@ return KBWidget({
         //
         // 4) get object data, create tabs
         //
-        if (isNaN(input.ws) && isNaN(input.obj) )
-            var param = {workspace: input.ws, name: input.obj};
-        else if (!isNaN(input.ws) && !isNaN(input.obj) )
-            var param = {ref: input.ws+'/'+input.obj};
 
         self.kbapi('ws', 'get_objects', [param])
           .done(function(data){
@@ -148,9 +143,9 @@ return KBWidget({
                 if (tabSpec.type == 'verticaltbl') continue;
 
                 // if widget, invoke widget with arguments
-                
+
                 if (tabSpec.widget) {
-                  
+
                     new tabSpec.widget(tabPane, tabSpec.getParams() );
                     continue;
                 }

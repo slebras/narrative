@@ -19,11 +19,17 @@ define ([
     kbaseLinechart
 ) {
     'use strict';
-    
+
     return KBWidget({
         name: 'kbaseExpressionSparkline',
         parent : kbaseExpressionGenesetBaseWidget,
         version: '1.0.0',
+
+        init: function(options) {
+            this._super(options);
+            this.upa = this.options.upas.expressionMatrixID;
+            return this;
+        },
 
         // To be overriden to specify additional parameters
         getSubmtrixParams: function(){
@@ -33,7 +39,7 @@ define ([
             if(self.options.geneIds) { features = $.map(self.options.geneIds.split(','), $.trim); }
 
             return{
-                input_data: self.options.workspaceID + '/' + self.options.expressionMatrixID,
+                input_data: self.upa,
                 row_ids: features,
                 fl_column_set_stat: 1,
                 fl_row_set_stats: 1,
@@ -49,7 +55,7 @@ define ([
             var matrixAvg = [];
             var clusterAvg = [];
             var clusterDisp = [];
-            
+
             var condition;
             for( var i = 0 ; i < columnSetStats.size; i++){
                 condition = columnDescriptors[i].id;
@@ -147,8 +153,8 @@ define ([
                     }
                 ],
             }
-            );            
+            );
         }
-        
+
     });
 });

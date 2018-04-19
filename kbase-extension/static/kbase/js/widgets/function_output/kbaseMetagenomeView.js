@@ -35,6 +35,7 @@ define (
 
 	    init: function(options) {
             this._super(options);
+            this.upa = this.options.upas.id;
             return this;
         },
 
@@ -51,11 +52,11 @@ define (
             container.append("<div><img src=\""+self.loading_image+"\">&nbsp;&nbsp;loading data...</div>");
 
 	        var kbws = new Workspace(self.ws_url, {'token': self.token});
-	        kbws.get_objects([{ref: self.options.ws+"/"+self.options.id}], function(data) {
+	        kbws.get_objects([{ref: self.upa}], function(data) {
 	            container.empty();
 		        // parse data
 		        if (data.length == 0) {
-		            var msg = "[Error] Object "+self.options.id+" does not exist in workspace "+self.options.ws;
+		            var msg = "[Error] Object "+self.upa+" does not exist";
 		            container.append('<div><p>'+msg+'>/p></div>');
 		        } else {
 				    // parse data

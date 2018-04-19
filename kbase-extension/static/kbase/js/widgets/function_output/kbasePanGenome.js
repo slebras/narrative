@@ -36,12 +36,9 @@ define([
 
         init: function(options) {
             this._super(options);
-            if (this.options.name.indexOf('/') > -1) {
-                this.objRef = this.options.name;
-            } else {
-                this.objRef = this.options.ws + '/' + this.options.name;
-            }
-            if (!ApiUtil.checkObjectRef(this.objRef)) {
+            this.upa = this.options.upas.name;
+
+            if (!ApiUtil.checkObjectRef(this.upa)) {
                 this.$elem.append(Display.createError('Bad object.', 'PanGenome Object Unavailable.'));
                 this.isError = true;
             }
@@ -55,7 +52,7 @@ define([
             this.dataPromise = Promise.resolve(
                 this.serviceClient.sync_call(
                     'PanGenomeAPI.compute_summary_from_pangenome',
-                    [{ pangenome_ref: this.objRef }]
+                    [{ pangenome_ref: this.upa }]
                 )
             );
             var $tabContainer = $('<div>');
@@ -410,7 +407,7 @@ define([
         searchAndCacheOrthologs: function(query, sortBy, start, limit) {
             var self = this;
             return Promise.resolve(this.serviceClient.sync_call('PanGenomeAPI.search_orthologs_from_pangenome', [{
-                pangenome_ref: this.objRef,
+                pangenome_ref: this.upa,
                 query: query,
                 sort_by: sortBy,
                 start: start,

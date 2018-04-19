@@ -46,23 +46,15 @@ define ([
         },
 
         init: function(options) {
-console.log("KRV OPTS : ", options);
+
             this._super(options);
+            this.upa = this.options.upas.obj_ref;
             return this;
         },
 
         render: function() {
-            if (this.options.obj_ref) {
-                this.reference = this.options.obj_ref;
-            }
-            else{
-                if (this.options._obj_info) {
-                    this.reference =  this.options.wsName + '/' + this.options.objId + '/' + this.options._obj_info['version'];
-                } else {
-                    this.reference =  this.options.wsName + '/' + this.options.objId;
-                }
-            }
-            Promise.resolve(this.client.sync_call("ReadsAPI.get_reads_info_all_formatted",[{workspace_obj_ref: this.reference}]))
+
+            Promise.resolve(this.client.sync_call("ReadsAPI.get_reads_info_all_formatted",[{workspace_obj_ref: this.upa}]))
             .then(function(results) {
                 this.reads = results[0];
                 //		this.$elem.append('<div>' + JSON.stringify(this.reads) + '</div>');
@@ -124,7 +116,7 @@ console.log("KRV OPTS : ", options);
 
             $overviewTable.append(get_table_row(
                 'Name',
-                '<a href="/#dataview/' + this.reference + '" target="_blank">' +
+                '<a href="/#dataview/' + this.upa + '" target="_blank">' +
                 this.reads["Name"] +'</a>'
             ));
             // leave out version for now, because that is not passed into data widgets

@@ -22,14 +22,8 @@ define (
         name: "kbaseBlastOutput",
         parent : kbaseAuthenticatedWidget,
         version: "1.0.0",
-        ws_id: null,
-        ws_name: null,
         token: null,
         width: 1150,
-        options: {
-            ws_id: null,
-            ws_name: null
-        },
         loadingImage: "static/kbase/images/ajax-loader.gif",
         wsUrl: window.kbconfig.urls.workspace,
         timer: null,
@@ -37,8 +31,7 @@ define (
 
         init: function (options) {
             this._super(options);
-            this.ws_id = options.blast_output_name;
-            this.ws_name = options.workspaceName;
+            this.upa = this.options.upas.ws_name;
             return this;
         },
 
@@ -430,7 +423,7 @@ define (
             container.empty();
             container.append("<div><img src=\"" + self.loading_image + "\">&nbsp;&nbsp;loading data...</div>");
 
-            kbws.get_objects([{ref: self.ws_name + "/" + self.ws_id}], function (data) {
+            kbws.get_objects([{ref: self.upa}], function (data) {
                     ready(data)
                 },
                 function (data) {

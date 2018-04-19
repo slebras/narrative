@@ -235,7 +235,7 @@ define (
         init : function init(options) {
 
             this._super(options);
-console.log("INIT SET WITH : ", options);
+
             this.upa = this.options.upas.output;
             var $rna = this;
 

@@ -563,7 +563,7 @@ define (
             var $content = $.jqElem('div');
 
             var gene = $self.geneMap[geneId];
-console.log("SHOWS GENE", geneId, gene);
+
             var contigName = null;
             var geneStart = null;
             var geneDir = null;

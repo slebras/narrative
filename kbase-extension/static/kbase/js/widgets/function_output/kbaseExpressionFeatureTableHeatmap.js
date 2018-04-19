@@ -20,13 +20,19 @@ define ([
     kbaseExpressionConditionsetBaseWidget
 ) {
     'use strict';
-    
+
     return KBWidget({
         name: 'kbaseExpressionFeatureTableHeatmap',
         parent: kbaseExpressionConditionsetBaseWidget,
         version: '1.0.0',
 
         colorGenerator: null,
+
+        init: function(options) {
+            this._super(options);
+            this.upa = this.options.upas.expressionMatrixID;
+            return this;
+        },
 
         // To be overriden to specify additional parameters
         getSubmtrixParams: function(){
@@ -55,7 +61,7 @@ define ([
             }
 
             return{
-                input_data: self.options.workspaceID + '/' + self.options.expressionMatrixID,
+                input_data: this.upa,
                 column_ids: conditions,
                 fl_column_set_stat: 1,
                 fl_row_set_stats: 1,
@@ -177,7 +183,7 @@ define ([
 
             self.updateColorGenerator();
 
-            // NB this strange ordering because data table will not work unless the table is 
+            // NB this strange ordering because data table will not work unless the table is
             // actually in the dom.
             self.$tableDiv.empty();
             $('<table id="' + self.pref + 'features-table" \

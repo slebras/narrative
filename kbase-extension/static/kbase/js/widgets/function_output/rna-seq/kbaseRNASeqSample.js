@@ -36,7 +36,7 @@ define (
         init : function init(options) {
 
             this._super(options);
-console.log("SEQ SAMPLE INIT WITH OPTIONS : ", options);
+
             this.upa = this.options.upas.output;
             this.setDataset(this.options.SetupRNASeqAnalysis);
 

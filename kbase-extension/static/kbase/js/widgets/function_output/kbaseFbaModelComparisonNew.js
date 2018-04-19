@@ -39,6 +39,7 @@ return KBWidget({
         this._super(options);
         this.ws_name = options.ws_name;
         this.mc_id = options.mc_id;
+        this.upa = this.options.upas.mc_id;
         return this;
     },
 
@@ -55,7 +56,7 @@ return KBWidget({
 
         var pref = StringUtil.uuid();
         var kbws = new Workspace(this.wsUrl, {'token': self.authToken()});
-        var get_object_input = [{ref: self.ws_name + "/" + self.mc_id}];
+        var get_object_input = [{ref: self.upa}];
 
         Promise.resolve(kbws.get_objects(get_object_input))
         .then(function(data) {

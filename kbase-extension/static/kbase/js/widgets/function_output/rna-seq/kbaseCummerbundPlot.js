@@ -149,10 +149,10 @@ define (
 
             var ws = new Workspace(window.kbconfig.urls.workspace, {token : $plot.authToken()});
 
+            this.upa = this.options.upas.ws_cummerbund_output || this.options.upas.generate_cummerbund_plots;
+
             var ws_params = {
-                workspace : this.options.workspaceName,
-                wsid : window.kbconfig.workspaceId,
-                name : this.options.ws_cummerbund_output || this.options.generate_cummerbund_plots
+              ref : this.upa,
             };
 
             if (this.options.workspaceName) {
@@ -165,7 +165,7 @@ define (
                   $plot.$elem.empty();
                   $plot.$elem
                       .addClass('alert alert-danger')
-                      .html("No cummerbundplotSet for " + ws_params.workspace + ':' + ws_params.name + ', [' + ws_params.wsid + ']');
+                      .html("No cummerbundplotSet for " + ws_params.ref);
                 }
                 else {
                   $plot.setDataset(d[0].data.cummerbundplotSet);

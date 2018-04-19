@@ -42,7 +42,9 @@ define([
         init: function(options) {
             this._super(options);
 
-            if (!ApiUtil.checkObjectRef(this.options.objRef)) {
+            this.upa = this.options.upas.objRef;
+
+            if (!ApiUtil.checkObjectRef(this.upa)) {
                 this.$elem.append(Display.createError('Bad object.', 'Binned Contigs Object Unavailable.'));
                 this.isError = true;
             }
@@ -74,7 +76,7 @@ define([
 
         showBinSummary: function () {
             var $content = $('<div>').css({'margin-top': '15px'}).append(this.loadingElement());
-            Promise.resolve(this.wsClient.get_object_info3({objects: [{ref: this.options.objRef}], includeMetadata: 1}))
+            Promise.resolve(this.wsClient.get_object_info3({objects: [{ref: this.upa}], includeMetadata: 1}))
             .then(function(data) {
                 var info = data.infos[0];
                 this.objectName = info[1];
@@ -128,7 +130,7 @@ define([
                         sortBy.push([sortColId, sortColDir === 1 ? 1 : 0]);
                     }
                     return Promise.resolve(self.serviceClient.sync_call('MetagenomeAPI.search_binned_contigs', [{
-                        ref: self.options.objRef,
+                        ref: self.upa,
                         query: query,
                         start: (pageNum * self.options.binLimit),
                         limit: self.options.binLimit,
@@ -170,7 +172,7 @@ define([
                 downloadAllDataFunction: function(sortColId, sortColDir) {
                     // 1. poke the object to get the number of bins.
                     return Promise.resolve(self.serviceClient.sync_call('MetagenomeAPI.search_binned_contigs', [{
-                        ref: self.options.objRef,
+                        ref: self.upa,
                         limit: 1
                     }]))
                     .then(function(results) {
@@ -180,7 +182,7 @@ define([
                             sortBy.push([sortColId, sortColDir === 1 ? 1 : 0]);
                         }
                         return Promise.resolve(self.serviceClient.sync_call('MetagenomeAPI.search_binned_contigs', [{
-                            ref: self.options.objRef,
+                            ref: self.upa,
                             start: 0,
                             limit: total,
                             sort_by: sortBy
@@ -237,7 +239,7 @@ define([
             var $content = $('<div>').css({'margin-top': '15px', 'width': '100%'}).append(this.loadingElement());
 
             Promise.resolve(this.serviceClient.sync_call('MetagenomeAPI.search_contigs_in_bin', [{
-                ref: this.options.objRef,
+                ref: this.upa,
                 bin_id: binId,
                 start: 0,
                 limit: this.options.plotContigLimit,
@@ -314,7 +316,7 @@ define([
 
         getSortedBinData: function(binId, start, limit, query, sortBy) {
             return Promise.resolve(this.serviceClient.sync_call('MetagenomeAPI.search_contigs_in_bin', [{
-                ref: this.options.objRef,
+                ref: this.upa,
                 bin_id: binId,
                 start: start,
                 query: query,
@@ -377,7 +379,7 @@ define([
                 downloadAllDataFunction: function(sortColId, sortColDir) {
                     // 1. poke the object to get the number of bins.
                     return Promise.resolve(self.serviceClient.sync_call('MetagenomeAPI.search_contigs_in_bin', [{
-                        ref: self.options.objRef,
+                        ref: self.upa,
                         bin_id: binId,
                         limit: 1
                     }]))

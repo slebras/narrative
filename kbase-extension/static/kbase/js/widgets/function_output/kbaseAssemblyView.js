@@ -39,6 +39,8 @@
         init: function(options) {
             this._super(options);
 
+            this.upa = this.options.upas.ws_id;
+
             this.ws_name = options.ws_name;
             this.ws_id = options.ws_id;
             if (options.job_id)
@@ -68,15 +70,13 @@
                 container.append("<div><img src=\""+self.loadingImage+"\">&nbsp;&nbsp;loading genome data...</div>");
                 var objname;
                 objname = self.ws_id
-                console.log("wsid")
-                console.log(self.ws_id)
                 if (typeof self.ws_id == "string") {
                     if (self.ws_id.indexOf(".report") == -1) { //Check if contigset or report
                         objname = self.ws_id + ".report"
                     }
                 }
 
-                kbws.get_objects([{ref: self.ws_name +"/"+ objname}], function(data) {
+                kbws.get_objects([{ref: self.upa}], function(data) {
                     container.empty();
                     var report_div = '<div class="" style="margin-top:15px">'
                     var report = data[0].data.report

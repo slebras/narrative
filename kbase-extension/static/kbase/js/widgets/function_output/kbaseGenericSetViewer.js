@@ -50,7 +50,7 @@ define (
 
         init : function init(options) {
           this._super(options);
-console.log("INIT WITH INFO : ", options);
+
           this.upa = this.options.upas.obj_ref;
           var $self = this;
           if (options._obj_info) {
