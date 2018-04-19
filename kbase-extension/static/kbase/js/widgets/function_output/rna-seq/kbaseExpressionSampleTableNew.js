@@ -201,18 +201,15 @@ define (
 
           this._super(options);
 
-
-            this._super(options);
-
             var $self = this;
+
+            this.ref = this.options.upas.output;
 
             var ws = new Workspace(window.kbconfig.urls.workspace, {token : $self.authToken()});
             //var ws = new Workspace('https://ci.kbase.us/services/ws', {token : $self.authToken()});
 
             var ws_params = {
-                workspace : this.options.workspace,
-                wsid : this.options.wsid,
-                name : this.options.output
+                ref : this.ref
             };
 
             ws.get_objects([ws_params]).then(function (d) {

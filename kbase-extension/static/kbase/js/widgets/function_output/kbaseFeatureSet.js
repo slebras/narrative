@@ -38,29 +38,15 @@ define (
 
         init: function(options) {
             this._super(options);
-
+console.log("INIT VIEW FEATURE SET : ", options);
+            this.upa = this.options.upas.featureset_name;
             this.$messagePane = $("<div/>").addClass("kbwidget-message-pane kbwidget-hide-message");
             this.$elem.append(this.$messagePane);
-
-            if (options.workspaceids && options.workspaceids.length > 0) {
-                var id = options.workspaceids[0].split('/');
-                this.options.treeID = id[1];
-                this.options.workspaceID = id[0];
-            }
 
             this.$mainPanel = $("<div>").addClass("").hide();
             this.$elem.append(this.$mainPanel);
 
-            if (!this.options.featureset_name) {
-                this.renderError("No FeatureSet to render!");
-            } else if (!this.options.workspaceName) {
-                this.renderError("No workspace given!");
-            } else if (!this.options.kbCache && !this.authToken()) {
-                this.renderError("No cache given, and not logged in!");
-            } else {
-                this.token = this.authToken();
-                this.render();
-            }
+            this.render();
 
             return this;
         },
@@ -80,8 +66,10 @@ define (
         loadFeatureSet: function() {
             var self = this;
             self.features = {};
-            self.ws.get_objects([{ref:self.options.workspaceName+"/"+self.options.featureset_name}],
+            console.log("LOADING UPA : ", self.upa);
+            self.ws.get_objects([ { ref: self.upa } ],
                 function(data) {
+                console.log("LAODED DATA : ", data);
                     var fs = data[0].data;
                     if(fs.description) {
                         self.$mainPanel.append($('<div>')
@@ -102,10 +90,12 @@ define (
                             }
                         }
                     }
+                    console.log("I AM : ", self);
                     self.getGenomeData();
                     self.$mainPanel.show();
                 },
                 function(error) {
+                console.log("F1");
                     self.loading(true);
                     self.renderError(error);
 
@@ -220,28 +210,6 @@ define (
             this.$elem.append($errorDiv);
         },
 
-        buildObjectIdentity: function(workspaceID, objectID, objectVer, wsRef) {
-            var obj = {};
-            if (wsRef) {
-                obj['ref'] = wsRef;
-            } else {
-                if (/^\d+$/.exec(workspaceID))
-                    obj['wsid'] = workspaceID;
-                else
-                    obj['workspace'] = workspaceID;
-
-                // same for the id
-                if (/^\d+$/.exec(objectID))
-                    obj['objid'] = objectID;
-                else
-                    obj['name'] = objectID;
-
-                if (objectVer)
-                    obj['ver'] = objectVer;
-            }
-            return obj;
-        },
-
         loading: function(doneLoading) {
             if (doneLoading)
                 this.hideMessage();
@@ -260,19 +228,6 @@ define (
             this.$messagePane.hide();
             this.$messagePane.empty();
         },
-
-        loggedInCallback: function(event, auth) {
-            if (this.token == null) {
-                this.token = auth.token;
-                this.render();
-            }
-            return this;
-        },
-
-        loggedOutCallback: function(event, auth) {
-            this.render();
-            return this;
-        }
 
     });
 });

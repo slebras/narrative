@@ -71,30 +71,8 @@ define (
         init: function init(options) {
             this._super(options);
 
-            if (this.options.wsNameOrId != undefined) {
-              this.wsKey = this.options.wsNameOrId.match(/^\d+/)
-                ? 'wsid'
-                : 'workspace'
-              ;
-            }
 
-            if (this.options.objNameOrId != undefined) {
-              this.objKey = this.options.objNameOrId.match(/^\d+/)
-                ? 'objid'
-                : 'name'
-              ;
-            }
-
-            if (this.options.objNameOrId == undefined && this.options.term_id != undefined) {
-              this.wsKey = 'workspace';
-              this.objKey = 'name';
-              this.options.wsNameOrId = 'KBaseOntology';
-
-              var m = this.options.term_id.match(/^([^:]+)/);
-              if (m.length) {
-                this.options.objNameOrId = this.options.dictionaryMap[m[1]]
-              };
-            }
+            this.upa = this.options.upas.objNameOrId;
 
             this.colors = ["#66c2a5","#fc8d62","#8da0cb","#e78ac3","#a6d854","#ffd92f","#e5c494","#b3b3b3"];
             this.colorMap = {};
@@ -105,10 +83,8 @@ define (
             $self.ws = new Workspace(window.kbconfig.urls.workspace, {token : this.authToken()});
 
             var dictionary_params = {
-                //wsid: this.options.workspaceId,
-                //objid: this.options.objectId,
-                //workspace: this.options.workspace_name,
-                //name: this.options.object_name,
+
+                ref : this.upa,
                 included: [
                     '/format_version', '/data_version', '/date', '/saved_by', '/auto_generated_by', '/subsetdef', '/synonymtypedef', '/default_namespace',
                     '/treat_xrefs_as_differentia', '/treat_xrefs_as_is_a', '/ontology',
@@ -123,9 +99,6 @@ define (
                 '/typedef_hash/',
                 ]
             };
-
-            dictionary_params[this.wsKey]  = this.options.wsNameOrId;
-            dictionary_params[this.objKey] = this.options.objNameOrId;
 
             this.appendUI(this.$elem);
 
@@ -464,16 +437,11 @@ define (
                 $self.data('loaderElem').show();
 
                 var dictionary_params = {
-                    //wsid: this.options.workspaceId,
-                    //objid: this.options.objectId,
+                    ref : this.upa,
                     included: [
                         '/term_hash/' + term_id + '/*'
-                        //'/term_hash/'
                     ]
                 };
-
-                dictionary_params[this.wsKey] = this.options.wsNameOrId;
-                dictionary_params[this.objKey] = this.options.objNameOrId;
 
                 $self.ws.get_object_subset([dictionary_params])
                     .then(function (data) {

@@ -36,7 +36,8 @@ define (
         init : function init(options) {
 
             this._super(options);
-
+console.log("SEQ SAMPLE INIT WITH OPTIONS : ", options);
+            this.upa = this.options.upas.output;
             this.setDataset(this.options.SetupRNASeqAnalysis);
 
             var $rna = this;
@@ -46,8 +47,7 @@ define (
             var ws = new Workspace(window.kbconfig.urls.workspace, {token : $rna.authToken()});
 
             var ws_params = {
-                workspace : this.options.workspaceName || this.options.associateReads.workspace,
-                name : this.options.ws_sample_id || this.options.associateReads.output
+                ref : this.upa
             };
 
             ws.get_objects([ws_params]).then(function (d) {

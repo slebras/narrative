@@ -28,6 +28,7 @@ define([
         li = t('li');
 
     function factory(config) {
+    
         var runtime = Runtime.make(),
             bus = runtime.bus().makeChannelBus({ description: 'Output Widget Bus' }),
             cellId = config.cellId,

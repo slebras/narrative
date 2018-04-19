@@ -27,8 +27,6 @@ define (
         parent : kbaseAuthenticatedWidget,
         version: '1.0.4',
         options: {
-            domainAnnotationID: null,
-            workspaceID: null,
             domainAnnotationVer: null,
             kbCache: null,
             workspaceURL: Config.url('workspace'),
@@ -54,6 +52,7 @@ define (
         init: function(options) {
             this._super(options);
 
+            this.upa = this.options.upas.domainAnnotationID;
             // Create a message pane
             this.$messagePane = $("<div/>").addClass("kbwidget-message-pane kbwidget-hide-message");
             this.$elem.append(this.$messagePane);
@@ -63,7 +62,7 @@ define (
 
         loggedInCallback: function(event, auth) {
         // error if not properly initialized
-            if (this.options.domainAnnotationID == null) {
+            if (this.upa == null) {
                 this.showMessage("[Error] Couldn't retrieve domain annotation data.");
                 return this;
             }
@@ -91,8 +90,7 @@ define (
             var container = this.$elem;
             var kbws = this.ws;
 
-            var domainAnnotationRef = self.buildObjectIdentity(this.options.workspaceID, this.options.domainAnnotationID, this.options.domainAnnotationVer);
-            kbws.get_objects([domainAnnotationRef], function(data) {
+            kbws.get_objects([{ ref : this.upa }], function(data) {
 
                 self.domainAnnotationData = data[0].data;
                 self.genomeRef = self.domainAnnotationData.genome_ref;
@@ -366,6 +364,11 @@ define (
 			});
 		    }
                 });
+            }, function(d) {
+              self.$elem.empty();
+              self.$elem
+                  .addClass('alert alert-danger')
+                  .html("Could not load object : " + d.error.message);
             });
         },
 
@@ -426,8 +429,7 @@ define (
         getData: function() {
             return {
                 type: 'DomainAnnotation',
-                id: this.options.domainAnnotationID,
-                workspace: this.options.workspaceID,
+                ref : this.upa,
                 title: 'Domain Annotation'
             };
         },
@@ -457,28 +459,6 @@ define (
                     var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
                     return v.toString(16);
                 });
-        },
-
-        buildObjectIdentity: function(workspaceID, objectID, objectVer, wsRef) {
-            var obj = {};
-            if (wsRef) {
-                obj['ref'] = wsRef;
-            } else {
-                if (/^\d+$/.exec(workspaceID))
-                    obj['wsid'] = workspaceID;
-                else
-                    obj['workspace'] = workspaceID;
-
-                // same for the id
-                if (/^\d+$/.exec(objectID))
-                    obj['objid'] = objectID;
-                else
-                    obj['name'] = objectID;
-
-                if (objectVer)
-                    obj['ver'] = objectVer;
-            }
-            return obj;
         },
 
         clientError: function(error){

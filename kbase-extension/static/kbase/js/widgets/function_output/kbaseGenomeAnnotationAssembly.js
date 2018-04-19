@@ -35,15 +35,10 @@ define ([
         init: function init(options) {
             this._super(options);
 
+            this.upa = this.options.upas.objNameOrId;
             var self = this;
-            self.obj_ref = self.options.wsNameOrId + '/' + self.options.objNameOrId;
+            self.obj_ref = self.upa;
             self.link_ref = self.obj_ref;
-
-            if(options._obj_info) {
-                self.assembly_info = options._obj_info;
-                self.obj_ref = self.assembly_info['ws_id'] + '/' + self.assembly_info['id'] + '/' + self.assembly_info['version'];
-                self.link_ref = self.assembly_info['ws_id'] + '/' + self.assembly_info['name'] + '/' + self.assembly_info['version'];
-            }
 
             self.client = new GenericClient(Config.url('service_wizard'), {token: self.authToken()});
             self.ws = new Workspace(Config.url('workspace'),{'token':self.authToken()});
@@ -61,7 +56,6 @@ define ([
                 Promise.resolve(self.ws.get_object_info_new({objects: [{'ref':this.obj_ref}], includeMetadata:1}))
                     .then(function(info) {
                         self.assembly_obj_info = info[0];
-                        self.link_ref = info[0][6] + '/' + info[0][1] + '/' + info[0][4];
                     }));
             Promise.all(basicInfoCalls)
                 .then(function() {

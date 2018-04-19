@@ -50,7 +50,8 @@ define (
 
         init : function init(options) {
           this._super(options);
-
+console.log("INIT WITH INFO : ", options);
+          this.upa = this.options.upas.obj_ref;
           var $self = this;
           if (options._obj_info) {
             $self.obj_info = options._obj_info;
@@ -77,7 +78,7 @@ define (
           var method = this.methodMap[bare_type];
 
           //this.setAPI[method]({ 'ref' : $self.obj_ref, include_item_info : 1 })
-          this.genericClient.sync_call('SetAPI.' + method, [{ 'ref' : $self.obj_ref, include_item_info : 1 }])
+          this.genericClient.sync_call('SetAPI.' + method, [{ 'ref' : $self.upa, include_item_info : 1 }])
             .then(function(results) {
               results = results[0].data;
 

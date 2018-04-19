@@ -10,7 +10,7 @@ define ([
     'kbwidget',
     'kbaseAuthenticatedWidget',
     'kbaseTabs',
-    'narrativeConfig',    
+    'narrativeConfig',
     'kb_common/jsonRpc/dynamicServiceClient',
     // For effect
     'bootstrap',
@@ -47,6 +47,8 @@ define ([
 
         init: function(options) {
             this._super(options);
+
+            this.upa = this.options.upas.expressionMatrixID;
             this.pref = this.uuid();
             // Create a message pane
             this.$messagePane = $('<div/>').addClass('kbwidget-message-pane kbwidget-hide-message');
@@ -84,11 +86,30 @@ define ([
             var self = this;
 
             self.loading(true);
+<<<<<<< Updated upstream
             var expressionMatrixRef = this.options.workspaceID + '/' + this.options.expressionMatrixID;
             self.featureValues.callFunc('get_matrix_stat', [{
                 input_data: expressionMatrixRef
             }])
                 .spread(function (data) {
+=======
+            var expressionMatrixRef = this.upa;
+            if (self.options.useDynamicService) {
+                self.genericClient.sync_call("KBaseFeatureValues.get_matrix_stat",
+                        [{input_data: expressionMatrixRef}], function(data){
+                    // console.log(data);
+                    self.matrixStat = data[0];
+                    self.render();
+                    self.loading(false);
+                },
+                function(error){
+                    self.clientError(error);
+                }, self.options.featureValueSrvVersion);
+            } else {
+                self.featureValueClient.get_matrix_stat({input_data: expressionMatrixRef},
+                        function(data){
+                    // console.log(data);
+>>>>>>> Stashed changes
                     self.matrixStat = data;
                     self.render();
                     self.loading(false);
@@ -232,6 +253,7 @@ define ([
                     }
                 );
             }
+            console.log("TABLE DATA IS : ", tableData, this.matrixStat);
             return tableData;
         },
 
@@ -242,11 +264,13 @@ define ([
             return $row;
         },
 
+        // XXX Is this function actually called?
         getData: function() {
             return {
                 type: 'ExpressionMatrix',
-                id: this.options.expressionMatrixID,
-                workspace: this.options.workspaceID,
+                //id: this.options.expressionMatrixID,
+                //workspace: this.options.workspaceID,
+                ref : this.upa,
                 title: 'Expression Matrix'
             };
         },
@@ -275,31 +299,9 @@ define ([
             return new Uuid(4).format();
         },
 
-        buildObjectIdentity: function(workspaceID, objectID, objectVer, wsRef) {
-            var obj = {};
-            if (wsRef) {
-                obj.ref = wsRef;
-            } else {
-                if (/^\d+$/.exec(workspaceID))
-                    obj.wsid = workspaceID;
-                else
-                    obj.workspace = workspaceID;
-
-                // same for the id
-                if (/^\d+$/.exec(objectID))
-                    obj.objid = objectID;
-                else
-                    obj.name = objectID;
-
-                if (objectVer)
-                    obj.ver = objectVer;
-            }
-            return obj;
-        },
-
         clientError: function(error){
             this.loading(false);
-            // TODO: Don't know that this is a service error; should 
+            // TODO: Don't know that this is a service error; should
             // inspect the error object.
             this.showMessage(error.message);
         }

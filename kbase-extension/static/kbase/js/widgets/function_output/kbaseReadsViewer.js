@@ -46,6 +46,7 @@ define ([
         },
 
         init: function(options) {
+console.log("KRV OPTS : ", options);
             this._super(options);
             return this;
         },

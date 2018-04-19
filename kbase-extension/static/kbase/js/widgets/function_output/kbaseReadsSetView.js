@@ -32,7 +32,7 @@ define ([
         init: function (options) {
             var $self = this;
             $self._super(options);
-
+console.log("CALLS RSV : ", options);
             /* Setup default data for the overview tab */
             $self.set_overview = {
                 'link_ref': '',

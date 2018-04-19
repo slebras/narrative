@@ -278,10 +278,12 @@ define (
         },
 
         init : function init(options) {
-
+;
             this._super(options);
 
             var $rna = this;
+
+            this.upa = this.options.upas.output;
 
             var ws = new Workspace(window.kbconfig.urls.workspace, {token : this.authToken()});
 
@@ -292,8 +294,7 @@ define (
             else {
                 ws.get_objects(
                     [{
-                        workspace : this.options.workspace,
-                        name : this.options.output
+                        ref : this.upa
                     }]
                 ).then(function(d) {
                     $rna.setDataset(d[0].data);

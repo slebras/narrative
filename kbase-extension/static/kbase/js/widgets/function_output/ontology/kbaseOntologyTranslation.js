@@ -35,15 +35,7 @@ define (
         init: function init(options) {
             this._super(options);
 
-            this.wsKey = this.options.wsNameOrId.match(/^\d+/)
-              ? 'wsid'
-              : 'workspace'
-            ;
-
-            this.objKey = this.options.objNameOrId.match(/^\d+/)
-              ? 'objid'
-              : 'name'
-            ;
+            this.ref = this.options.upas.objNameOrId;
 
             this.colors = ["#66c2a5","#fc8d62","#8da0cb","#e78ac3","#a6d854","#ffd92f","#e5c494","#b3b3b3"];//colorbrewer.Set2[8];
             this.colorMap = {};
@@ -52,11 +44,7 @@ define (
 
             var ws = new Workspace(window.kbconfig.urls.workspace, {token : this.authToken()});
 
-            var dictionary_params = { };
-            dictionary_params[this.wsKey] = this.options.wsNameOrId;
-            dictionary_params[this.objKey] = this.options.objNameOrId;
-
-            ws.get_objects([dictionary_params])
+            ws.get_objects([{ ref : this.ref }])
                 .then(function (data) {
                     data = data[0].data;
 
@@ -100,15 +88,16 @@ define (
                         );
                     }
 
+                    // XXX EEK! These should be updated to point to a specific UPA
                     var dict_links = {
-                      'ncbi'           : 'KBaseOntology/1',
-                      'po'           : 'KBaseOntology/2',
-                      'go'           : 'KBaseOntology/3',
-                      'toy'           : 'KBaseOntology/4',
-                      'sso'           : 'KBaseOntology/8',
-                      'peo'           : 'KBaseOntology/9',
-                      'pto'           : 'KBaseOntology/10',
-                      'eo'           : 'KBaseOntology/11',
+                      'ncbi' : 'KBaseOntology/1',
+                      'po'   : 'KBaseOntology/2',
+                      'go'   : 'KBaseOntology/3',
+                      'toy'  : 'KBaseOntology/4',
+                      'sso'  : 'KBaseOntology/8',
+                      'peo'  : 'KBaseOntology/9',
+                      'pto'  : 'KBaseOntology/10',
+                      'eo'   : 'KBaseOntology/11',
                     };
 
 

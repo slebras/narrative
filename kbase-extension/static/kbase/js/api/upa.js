@@ -26,7 +26,7 @@ define([
                 }
             }
             if (!isUpa(upa)) {
-                throw {error: '"' + upa + '" is not a valid UPA. It may already have been serialized.'};
+                throw {error: '"' + upa + '" !!!is not a valid UPA. It may already have been serialized.'};
             }
             return upa;
         };
@@ -46,6 +46,7 @@ define([
          * If the passed upa is not properly formatted, this will throw an Error.
          */
         var serialize = function(upa) {
+        console.log("SERIALIZE");
             upa = prepareUpaSerialization(upa);
             return upa.replace(/^(\d+)\//, '[$1]/');
         };
@@ -66,6 +67,7 @@ define([
          * If the passed upa is not properly formatted, this will throw an Error.
          */
         var serializeExternal = function(upa) {
+        console.log("SER E");
             upa = prepareUpaSerialization(upa);
             return externalTag + upa;
         };
@@ -124,6 +126,7 @@ define([
         };
 
         var serializeAll = function(upas) {
+        console.log("SA WITH : ", upas);
             if (typeof upas === 'string') {
                 return serialize(upas);
             }

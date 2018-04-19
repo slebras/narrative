@@ -139,6 +139,7 @@ define([
         handleUpas: function(useLocal) {
             // if useLocal, then drop the current values in this.upas into the metadata.
             // otherwise, if there's existing upas in metadata, supplant this.upas with those.
+            console.log("HANDLES UPAS : ", useLocal, this.metadata.kbase.dataCell.upas, this.options.upas);
             if (!this.metadata.kbase.dataCell.upas) {
                 // bail out silently if we don't have any upas, AND there's non in the cell meta.
                 // This likely means that we're dealing with a non-updated Narrative.

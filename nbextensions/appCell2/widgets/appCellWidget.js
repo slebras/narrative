@@ -77,6 +77,7 @@ define([
         appStates = AppStates;
 
     function factory(config) {
+    
         var hostNode,
             container, ui,
             workspaceInfo = config.workspaceInfo,

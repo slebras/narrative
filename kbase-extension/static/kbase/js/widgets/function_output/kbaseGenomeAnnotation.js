@@ -70,13 +70,9 @@ define (
         name: "kbaseGenomeView",
         parent : kbaseAuthenticatedWidget,
         version: "1.0.0",
-        ws_id: null,
-        ws_name: null,
         token: null,
         width: 1150,
         options: {
-            ws_id: null,
-            ws_name: null
         },
         loadingImage: Config.get('loading_gif'),
         wsUrl: Config.url('workspace'),
@@ -87,17 +83,12 @@ define (
             this._super(options);
 
             var self = this;
-            self.ws_name = options.ws_name;
-            self.ws_id = options.ws_id;
-            if (options.ws && options.id) {
-                  self.ws_id = options.id;
-                  self.ws_name = options.ws;
-            }
 
-            self.genome_ref = self.ws_name + '/' + self.ws_id;
+
+            self.genome_ref = self.options.upas.id;
+
             if(options._obj_info) {
                 self.genome_info = options._obj_info;
-                self.genome_ref = self.genome_info['ws_id'] + '/' + self.genome_info['id'] + '/' + self.genome_info['version'];
             }
 
             var token = null;
@@ -1039,7 +1030,6 @@ define (
 
                     $overviewPanel.append($('<div>').css('margin-top','15px').append($layout));
 
-
                     var id = '<a href="/#dataview/'+gnm.ref+'" target="_blank">' + gnm.ws_obj_name + '</a>'
 
                     var scientific_name = gnm.scientific_name
@@ -1193,7 +1183,7 @@ define (
             var genomeData = self.normalizeGenomeMetadata(genome_info['meta'], genome_ref, noDataCallback);
             genomeData['ws_obj_name'] = genome_info['name'];
             genomeData['version'] = genome_info['version'];
-            genomeData['ref'] = genome_info['ws_id'] + '/' + genome_info['name'] + '/' + genome_info['version'];
+            genomeData['ref'] = self.genome_ref;
             return genomeData;
         },
 
@@ -1204,7 +1194,7 @@ define (
             var genomeData = self.normalizeGenomeMetadata(metadata, genome_ref, noDataCallback);
             genomeData['ws_obj_name'] = info[1];
             genomeData['version'] = info[4];
-            genomeData['ref'] = info[6] + '/' + info[1] + '/' + info[4];
+            genomeData['ref'] = self.genome_ref;
             return genomeData;
         },
 
@@ -1266,7 +1256,7 @@ define (
                             var genomeData = data['genomes'][0]['data'];
                             genomeData['ws_obj_name'] = info[1];
                             genomeData['version'] = info[4];
-                            genomeData['ref'] = info[6] + '/' + info[1] + '/' + info[4];
+                            genomeData['ref'] = self.genome_ref;
 
                             // normalize these data fields too
                             if(!genomeData['domain']) {
@@ -1683,6 +1673,7 @@ define (
                 var tblData = [];
 
                 tblLabels.push('Feature ID');
+                console.log("GENOME REF : ", self.genome_ref, fid);
                 tblData.push('<a href="/#dataview/'+self.genome_ref+'?sub=Feature&subid='+fid+'" target="_blank">'+fid+'</a>');
 
                 tblLabels.push('Aliases');

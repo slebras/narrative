@@ -64,7 +64,7 @@ define (
                               ]})
                           )
                         }
-                        else {
+                        /* else {
 
                           all_promises.push(
                               ws.get_object_info3({ objects : [
@@ -75,7 +75,7 @@ define (
                                 }
                               ]})
                           )
-                        }
+                        } */
                     }
                 );
             }
@@ -235,7 +235,8 @@ define (
         init : function init(options) {
 
             this._super(options);
-
+console.log("INIT SET WITH : ", options);
+            this.upa = this.options.upas.output;
             var $rna = this;
 
             var ws = new Workspace(window.kbconfig.urls.workspace, {token : this.authToken()});
@@ -247,10 +248,7 @@ define (
             else {
 
                 ws.get_objects2(
-                    {objects : [{
-                        workspace : this.options.workspace,
-                        name : this.options.output
-                    }]}
+                    {objects : [{ ref : this.upa }]}
                 ).then(function(d) {
 
 

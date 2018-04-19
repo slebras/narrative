@@ -45,8 +45,13 @@ define (
         init : function init(options) {
           this._super(options);
 
+          this.upa = this.options.upas.obj_ref;
+
           var $self = this;
-          if (options._obj_info) {
+          if (this.upa) {
+            this.obj_ref = this.link_ref = this.upa;
+          }
+          else if (options._obj_info) {
             $self.obj_info = options._obj_info;
             $self.obj_ref = $self.obj_info.ws_id + '/' +
                             $self.obj_info.id + '/' +

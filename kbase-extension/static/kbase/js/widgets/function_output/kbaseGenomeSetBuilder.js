@@ -38,8 +38,10 @@ define (
         genomeList: null,
 
         init: function(options) {
+
             this._super(options);
             this.pref = this.genUUID();
+            this.upa = this.options.upas.genomeSetName;
             this.render();
             return this;
         },
@@ -52,7 +54,7 @@ define (
                 	return;
         		}
                 var kbws = new Workspace(this.wsUrl, {'token': this.authToken()});
-        		var prom = kbws.get_objects([{workspace:this.options.wsName, name: this.options.genomeSetName}]);
+        		var prom = kbws.get_objects([{ref : this.upa}]);
         		var self = this;
         		$.when(prom).done(function(data) {
                 	var data = data[0].data;

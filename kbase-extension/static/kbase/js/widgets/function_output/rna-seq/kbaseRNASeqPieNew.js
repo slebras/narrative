@@ -307,6 +307,8 @@ define (
 
             this._super(options);
 
+            this.upa = this.options.upas.output;
+
             if (this.options.dataset) {
                 this.setDataset(this.options.dataset);
             }
@@ -315,23 +317,7 @@ define (
               if (! $.isPlainObject(this.options.output)) {
 
                 var ws = new Workspace(window.kbconfig.urls.workspace, {token : $pie.authToken()});
-
-                var ws_key = 'workspace';
-                var ws_id_key = undefined;
-                var obj_key = 'output';
-
-                var ws_params = {
-                    workspace : $pie.options[ws_key] || $pie.options.workspaceName,
-                    name : $pie.options[obj_key] || $pie.options.ws_alignment_sample_id,
-                };
-
-                if (this.options.ws_alignment_sample_id) {
-                  ws_params = { ref : this.options.ws_sample_id };
-                }
-
-                if (this.options.upas.output) {
-                    ws_params = { ref: this.options.upas.output };
-                }
+                var ws_params = { ref : this.upa };
 
                 ws.get_objects2({objects : [ws_params]}).then(function (d) {
                   $pie.options.output = d.data[0].data;

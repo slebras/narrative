@@ -52,36 +52,20 @@ define (
         init: function(options) {
             this._super(options);
 
+            this.upa = this.options.upas.objNameOrId;
             this.content = {};
             this.tableData = {};
             this.populated = {};
             this.contigMap = {};
             this.geneMap = {};
 
-            if (this.options.wsNameOrId != undefined) {
-              this.wsKey = this.options.wsNameOrId.match(/^\d+/)
-                ? 'wsid'
-                : 'workspace'
-              ;
-            }
-
-            if (this.options.objNameOrId != undefined) {
-              this.objKey = this.options.objNameOrId.match(/^\d+/)
-                ? 'objid'
-                : 'name'
-              ;
-            }
-
-
             var $self = this;
 
-            var dictionary_params = {};
-            dictionary_params[this.wsKey] = this.options.wsNameOrId;
-            dictionary_params[this.objKey] = this.options.objNameOrId;
+            var dictionary_params = { ref : this.upa };
 
             this.dictionary_params = dictionary_params;
 
-            this.ref = this.options.wsNameOrId + '/' + this.options.objNameOrId;
+            this.ref = this.upa;
             this.genome_api = new GenomeAnnotationAPI(Config.url('service_wizard'), {token : this.authToken() });
 
             $self.ws = new Workspace(window.kbconfig.urls.workspace, {token : this.authToken()});
