@@ -86,30 +86,12 @@ define ([
             var self = this;
 
             self.loading(true);
-<<<<<<< Updated upstream
+
             var expressionMatrixRef = this.options.workspaceID + '/' + this.options.expressionMatrixID;
             self.featureValues.callFunc('get_matrix_stat', [{
                 input_data: expressionMatrixRef
             }])
                 .spread(function (data) {
-=======
-            var expressionMatrixRef = this.upa;
-            if (self.options.useDynamicService) {
-                self.genericClient.sync_call("KBaseFeatureValues.get_matrix_stat",
-                        [{input_data: expressionMatrixRef}], function(data){
-                    // console.log(data);
-                    self.matrixStat = data[0];
-                    self.render();
-                    self.loading(false);
-                },
-                function(error){
-                    self.clientError(error);
-                }, self.options.featureValueSrvVersion);
-            } else {
-                self.featureValueClient.get_matrix_stat({input_data: expressionMatrixRef},
-                        function(data){
-                    // console.log(data);
->>>>>>> Stashed changes
                     self.matrixStat = data;
                     self.render();
                     self.loading(false);
