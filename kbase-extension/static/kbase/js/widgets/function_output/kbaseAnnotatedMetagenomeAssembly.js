@@ -205,7 +205,7 @@ define ([
             };
 
             var $resultDiv = $('<div>');
-            var $noResultsDiv = $('<div>').append('<center>No matching features found.</center>').hide();
+            var $noResultsDiv = $('<div>').append('<center>No matching currently features found.<br />Note: If this object was recently created, there may be a delay in feature tab functionality due to indexing.</center>').hide();
             var $loadingDiv = $('<div>');
             var $errorDiv = $('<div>');
             var $pagenateDiv = $('<div>').css('text-align','left');
@@ -1100,14 +1100,20 @@ define ([
                 var gc_content = mgnm.gc_content;
                 var environment = mgnm.environment;
                 var num_contigs = mgnm.num_contigs;
+                if (num_contigs) {
+                    num_contigs = numberWithCommas(num_contigs);
+                }
                 var num_features = mgnm.num_features;
+                if (num_features) {
+                    num_features = numberWithCommas(num_features);
+                }
 
                 var overviewLabels = [
                     'KBase Object Name',
                     'Source',
                     'Source ID',
-                    'Number of Features',
                     'Number of Contigs',
+                    'Number of Features',
                     'Size',
                     'GC Content',
                     'Environment'
