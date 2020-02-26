@@ -1056,7 +1056,9 @@ define ([
                 this.showError('You\'re not logged in');
                 return;
             }
+            ////////////////////////////////
             ///////// Overview Tab /////////
+            ////////////////////////////////
             var ready = function (metagenomeData) {
                 var mgnm = metagenomeData;
 
@@ -1097,11 +1099,15 @@ define ([
                 }
                 var gc_content = mgnm.gc_content;
                 var environment = mgnm.environment;
+                var num_contigs = mgnm.num_contigs;
+                var num_features = mgnm.num_features;
 
                 var overviewLabels = [
                     'KBase Object Name',
                     'Source',
                     'Source ID',
+                    'Number of Features',
+                    'Number of Contigs',
                     'Size',
                     'GC Content',
                     'Environment'
@@ -1111,6 +1117,8 @@ define ([
                     id,
                     source,
                     source_id,
+                    num_contigs,
+                    num_features,
                     size,
                     gc_content,
                     environment
@@ -1211,7 +1219,9 @@ define ([
                 source: '',
                 source_id: '',
                 size: '',
-                gc_content: ''
+                gc_content: '',
+                num_contigs: '',
+                num_features: ''
             };
 
             if(metadata['Genetic code']) {
@@ -1226,11 +1236,17 @@ define ([
             if(metadata['Size']) {
                 genomeData.size = metadata['Size'];
             }
-            if (metadata['GC Content']){
-                genomeData.gc_content = metadata['GC Content'];
+            if (metadata['GC content']){
+                genomeData.gc_content = metadata['GC content'];
             }
             if (metadata['Environment']){
                 genomeData.environment = metadata['Environment'];
+            }
+            if (metadata['Number contigs']){
+                genomeData.num_contigs = metadata['Number contigs']
+            }
+            if (metadata['Number features']){
+                genomeData.num_features = metadata['Number features']
             }
 
             return genomeData;
