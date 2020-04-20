@@ -1130,6 +1130,18 @@ define ([
                     environment
                 ];
 
+                var feature_counts = mgnm.feature_counts;
+
+                if (feature_counts) {
+                    for (var key in feature_counts){
+                        if (feature_counts.hasOwnProperty(key)){
+                            let edited_key = key.replace("_", " ")
+                            overviewLabels.append(key.concat(" count"))
+                            overviewData.append(numberWithCommas(feature_counts[key]))
+                        }
+                    }
+                }
+
                 for (i=0; i<overviewData.length; i++) {
                     $overviewTable.append(
                         $('<tr>')
@@ -1226,8 +1238,10 @@ define ([
                 source_id: '',
                 size: '',
                 gc_content: '',
+                environment: '',
                 num_contigs: '',
-                num_features: ''
+                num_features: '',
+                feature_counts: ''
             };
 
             if(metadata['Genetic code']) {
@@ -1253,6 +1267,9 @@ define ([
             }
             if (metadata['Number features']){
                 genomeData.num_features = metadata['Number features']
+            }
+            if (metadata['FeatureCounts']){
+                genomeData.feature_counts = metadata['FeatureCounts']
             }
 
             return genomeData;
