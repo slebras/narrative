@@ -58,9 +58,9 @@ define([
                     this.ss_info['version'];
             }
 
-            this.client = new GenericClient(Config.url('service_wizard'), {
+            this.client = new GenericClient(Config.url('sample_service'), {
                 token: this.authToken(),
-            });
+            }, null, false);
             this.ws = new Workspace(Config.url('workspace'), { token: this.authToken() });
 
             this.$elem.append(
